@@ -28,7 +28,6 @@ function Inicio() {
                             />
                         </div>
                     </div>
-
                 </div>
             </section>
 
