@@ -1,11 +1,9 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
 import productos from '../data/productos';
 
 function Productos() {
     return (
         <>
-            <Navbar />
             <section className="py-5">
                 <div className="container">
                     <h2 className="text-center mb-5 fw-bold">Nuestros Productos</h2>
@@ -30,7 +28,6 @@ function Productos() {
                     </div>
                 </div>
             </section>
-            <Footer />
         </>
     );
 }

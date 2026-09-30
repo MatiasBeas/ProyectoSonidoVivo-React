@@ -62,7 +62,7 @@ body {
 
 /* ---- Páginas de autenticación (login / registro) ---- */
 .auth-bg {
-    background: linear-gradient(135deg, var(--oscuro) 0%, white 100%);
+    background: linear-gradient(135deg, var(--oscuro) 0%, #e8e8ec 100%);
     min-height: calc(100vh - 56px);
     display: flex;
     align-items: center;

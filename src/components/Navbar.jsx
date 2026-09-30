@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
-function Navbar() {
+
+function Navbar({ usuario }) {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
             <div className="container-fluid">
@@ -23,18 +24,18 @@ function Navbar() {
                     </ul>
                     <ul className="navbar-nav ms-lg-auto align-items-lg-center">
                         <li className="nav-item mt-2 mt-lg-0 me-lg-3">
-                            <a className="nav-link text-white position-relative" href="/carrito" id="iconoCarrito">
+                            <Link className="nav-link text-white position-relative" to="/carrito" id="iconoCarrito">
                                 🛒
                                 <span id="contadorCarrito" className="badge rounded-pill d-none" style={{ position: 'absolute', top: 0, right: '-8px', backgroundColor: 'var(--acento)', fontSize: '0.65rem' }}>
                                     0
                                 </span>
 
-                            </a>
+                            </Link>
                         </li>
                         <li className="nav-item mt-2 mt-lg-0" id="navInvitado">
-                            <a className="btn btn-outline-light btn-sm rounded-pill px-3 me-lg-2" href="/login">Iniciar
-                                sesión</a>
-                            <a className="btn btn-accent btn-sm rounded-pill px-3" href="/registro">Registrarse</a>
+                            <Link to="/login" className="btn btn-outline-light btn-sm rounded-pill px-3 me-lg-2">Iniciar
+                                sesión</Link>
+                            <Link to="/registro" className="btn btn-accent btn-sm rounded-pill px-3">Registrarse</Link>
                         </li>
                         
                         <li className="nav-item dropdown mt-2 mt-lg-0 d-none" id="navUsuario">

@@ -1,6 +1,4 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-
+import { Link } from 'react-router-dom';
 
 const categorias = [
     { nombre: "Guitarras", descripcion: "Eléctricas y acústicas para todo nivel.", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9a9-2oGfSXR8yF1kc5dGH_ksXMEBuINK2H8W6OSMlRw&s=10" },
@@ -11,7 +9,6 @@ const categorias = [
 function Inicio() {
     return (
         <>
-            <Navbar />
             <section className="hero py-5 px-4 px-lg-5">
                 <div className="container">
                     <div className="row align-items-center">
@@ -20,7 +17,7 @@ function Inicio() {
                             <p className="lead mb-4" style={{ color: "rgba(255,255,255,0.8)" }}>
                                 Todo lo que necesitas para iniciar en el mundo de la música.
                             </p>
-                            <a href="/productos" className="btn btn-accent btn-lg rounded-pill px-4">Ver Productos</a>
+                            <Link to="/productos" className="btn btn-accent btn-lg rounded-pill px-4">Ver Productos</Link>
                         </div>
                         <div className="col-lg-6 mt-4 mt-lg-0">
                             <img src="https://images.unsplash.com/photo-1535587566541-97121a128dc5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Z3VpdGFyfGVufDB8MHwwfHx8MA%3D%3D"
@@ -44,7 +41,7 @@ function Inicio() {
                                     <div className="card-body text-center">
                                         <h5 className="card-title">{categoria.nombre}</h5>
                                         <p className="card-text">{categoria.descripcion}</p>
-                                        <a href="/productos" className="btn btn-accent">Ver más</a>
+                                        <Link to="/productos" className="btn btn-accent">Ver más</Link>
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +50,6 @@ function Inicio() {
                     </div>
                 </div>
             </section>
-            <Footer />
         </>
     );
 }

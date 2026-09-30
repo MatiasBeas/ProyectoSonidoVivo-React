@@ -1,11 +1,8 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { Link } from 'react-router-dom'; // 1. Importamos el componente de enrutado
+import { Link } from 'react-router-dom'; 
 
 function Registro() {
     return (
         <>
-            <Navbar />
             <section className="auth-bg">
                 <div className="auth-card">
 
@@ -39,13 +36,11 @@ function Registro() {
                     </form>
 
                     <p className="text-center mt-3 auth-switch">
-                        {/* 2. Reemplazamos <a> por <Link> apuntando a tu ruta */}
                         ¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link>
                     </p>
 
                 </div>
             </section>
-            <Footer />
         </>
     );
 }
