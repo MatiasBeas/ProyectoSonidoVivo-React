@@ -22,11 +22,11 @@ function Perfil(){
 
                                 <div className="mb-3">
                                     <label className="form-label">Correo electrónico</label>
-                                    <input type="email" className="form-control" id="perfilEmail" desabled>
+                                    <input type="email" className="form-control" id="perfilEmail" desabled/>
                                     <div className="form-text">El correo no se puede modificar.</div>
                                 </div>
 
-                                <hr>
+                                <hr/>
                                 
                                 <p className="small text-muted mb-2">Deja los campos de contraseña en blanco si no deseas 
                                     cambiarla.</p>

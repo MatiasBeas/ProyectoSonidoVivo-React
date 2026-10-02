@@ -20,7 +20,7 @@ body {
 
 .hero {
     background: linear-gradient(135deg, var(--oscuro) 0%, #16213e 100%);
-    min-height: calc(100vh - 56px); /* 56px es el alto típico del navbar de Bootstrap */
+    min-height: calc(100vh - 56px); 
     display: flex;
     align-items: center;
 }
