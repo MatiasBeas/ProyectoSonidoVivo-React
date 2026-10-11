@@ -9,7 +9,7 @@ function RutaProtegida({rol, permitirAdminSiempre = true, children}){
         return <Navigate to="/login" replace state={{from: location.pathname}}/>;
     }
 
-    const tienePermiso = sesion.rol === rol || (permitirAdminSiempre && sesion.rol === 'administrador');
+    const tienePermiso = !rol || sesion.rol === rol || (permitirAdminSiempre && sesion.rol === 'administrador');
 
     if (!tienePermiso){
         return <Navigate to= "/" replace/>;

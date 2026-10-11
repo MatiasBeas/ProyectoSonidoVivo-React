@@ -17,7 +17,8 @@ export function CarritoProvider({ children }) {
     const [carrito, setCarrito] = useState(leerCarrito);
 
     useEffect(() => {
-        localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));}, [carrito]);
+        localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito));
+    }, [carrito]);
 
     function agregarAlCarrito(id) {
         setCarrito(actual => {
@@ -45,15 +46,19 @@ export function CarritoProvider({ children }) {
     function eliminarDelCarrito(id) {
         setCarrito(actual => actual.filter(item => item.id !== id));
     }
+    function vaciarCarrito() {
+        setCarrito([]);
+    }
 
     const totalItems = carrito.reduce((suma, item) => suma + item.cantidad, 0);
 
-    const value = {
+        const value = {
         carrito,
         totalItems,
         agregarAlCarrito,
         cambiarCantidad,
         eliminarDelCarrito,
+        vaciarCarrito,
     };
     return <CarritoContext.Provider value={value}>{children}</CarritoContext.Provider>;
 }

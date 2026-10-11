@@ -1,74 +1,30 @@
-import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Perfil() {
-    const { sesion, logout } = useAuth();
+    const { sesion, actualizarPerfil, logout } = useAuth();
     const navigate = useNavigate();
 
     const [nombre, setNombre] = useState(sesion?.nombre || '');
-    const [email, setEmail] = useState(sesion?.email || '');
-    const [password, setPassword] = useState(''); 
+    const [passwordNueva, setPasswordNueva] = useState('');
+    const [passwordConfirmar, setPasswordConfirmar] = useState('');
     const [mensaje, setMensaje] = useState({ tipo: '', texto: '' });
-
-    const obtenerRolPorEmail = (correo) => {
-        const emailLower = correo.toLowerCase();
-        if (emailLower.endsWith('@admin.com')) return 'administrador';
-        if (emailLower.endsWith('@vendedor.com')) return 'vendedor';
-        return 'cliente';
-    };
 
     const handleGuardarCambios = (e) => {
         e.preventDefault();
         setMensaje({ tipo: '', texto: '' });
 
-        if (!nombre.trim() || !email.trim()) {
-            setMensaje({ tipo: 'danger', texto: 'El nombre y el correo no pueden estar vacíos.' });
+        const resultado = actualizarPerfil({ nombre, passwordNueva, passwordConfirmar });
+
+        if (!resultado.ok) {
+            setMensaje({ tipo: 'danger', texto: resultado.error });
             return;
         }
 
-        const usuarios = JSON.parse(localStorage.getItem('sonidoVivoUsuario') || '[]');
-
-        const indexActual = usuarios.findIndex(
-            (u) => u.email.toLowerCase() === sesion?.email.toLowerCase()
-        );
-
-        if (indexActual === -1) {
-            setMensaje({ tipo: 'danger', texto: 'No se encontró el usuario en la base de datos local.' });
-            return;
-        }
-
-        const correoEnUso = usuarios.some(
-            (u, idx) => idx !== indexActual && u.email.toLowerCase() === email.trim().toLowerCase()
-        );
-
-        if (correoEnUso) {
-            setMensaje({ tipo: 'danger', texto: 'El correo ingresado ya está registrado por otro usuario.' });
-            return;
-        }
-
-        const nuevoRol = obtenerRolPorEmail(email.trim());
-
-        const usuarioActualizado = {
-            ...usuarios[indexActual],
-            nombre: nombre.trim(),
-            email: email.trim(),
-            rol: nuevoRol,
-            password: password.trim() !== '' ? password : usuarios[indexActual].password
-        };
-
-        usuarios[indexActual] = usuarioActualizado;
-        localStorage.setItem('sonidoVivoUsuario', JSON.stringify(usuarios));
-
-        const nuevaSesion = {
-            nombre: usuarioActualizado.nombre,
-            email: usuarioActualizado.email,
-            rol: usuarioActualizado.rol
-        };
-        localStorage.setItem('sonidoVivoSesion', JSON.stringify(nuevaSesion));
-
-        setPassword('');
-        setMensaje({ tipo: 'success', texto: '¡Perfil, correo y contraseña actualizados correctamente! (Recarga para ver cambios reflejados)' });
+        setPasswordNueva('');
+        setPasswordConfirmar('');
+        setMensaje({ tipo: 'success', texto: 'Perfil actualizado correctamente.' });
     };
 
     const handleCerrarSesion = () => {
@@ -76,14 +32,7 @@ function Perfil() {
         navigate('/login');
     };
 
-    if (!sesion) {
-        return (
-            <div className="container my-5 text-center">
-                <h3>No hay una sesión activa</h3>
-                <p>Por favor, inicia sesión para ver tu perfil.</p>
-            </div>
-        );
-    }
+    if (!sesion) return null;
 
     return (
         <div className="container my-5">
@@ -100,9 +49,7 @@ function Perfil() {
 
                         <form onSubmit={handleGuardarCambios}>
                             <div className="mb-3">
-                                <label htmlFor="nombre" className="form-label">
-                                    Nombre Completo
-                                </label>
+                                <label htmlFor="nombre" className="form-label">Nombre Completo</label>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -114,48 +61,56 @@ function Perfil() {
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="email" className="form-label">
-                                    Correo Electrónico
-                                </label>
+                                <label htmlFor="email" className="form-label">Correo Electrónico</label>
                                 <input
                                     type="email"
                                     className="form-control"
                                     id="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
+                                    value={sesion.email}
+                                    disabled
                                 />
-                            </div>
-
-                            <div className="mb-3">
-                                <label htmlFor="password" className="form-label">
-                                    Nueva Contraseña <small className="text-muted">(deja en blanco si no deseas cambiarla)</small>
-                                </label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="password"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <div className="form-text">El correo no se puede modificar.</div>
                             </div>
 
                             <div className="mb-3">
                                 <label className="form-label text-muted mb-0">Rol Actual</label>
                                 <div>
-                                    <span className="badge bg-primary fs-6">
-                                        {obtenerRolPorEmail(email)}
-                                    </span>
+                                    <span className="badge bg-primary fs-6">{sesion.rol}</span>
                                 </div>
                             </div>
 
                             <hr />
 
+                            <p className="small text-muted mb-2">
+                                Deja los campos de contraseña en blanco si no deseas cambiarla.
+                            </p>
+
+                            <div className="mb-3">
+                                <label htmlFor="passwordNueva" className="form-label">Nueva Contraseña</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="passwordNueva"
+                                    placeholder="••••••••"
+                                    value={passwordNueva}
+                                    onChange={(e) => setPasswordNueva(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="passwordConfirmar" className="form-label">Confirmar Nueva Contraseña</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="passwordConfirmar"
+                                    placeholder="••••••••"
+                                    value={passwordConfirmar}
+                                    onChange={(e) => setPasswordConfirmar(e.target.value)}
+                                />
+                            </div>
+
                             <div className="d-flex justify-content-between align-items-center mt-4">
-                                <button type="submit" className="btn btn-accent">
-                                    Guardar Cambios
-                                </button>
+                                <button type="submit" className="btn btn-accent">Guardar Cambios</button>
                                 <button
                                     type="button"
                                     onClick={handleCerrarSesion}

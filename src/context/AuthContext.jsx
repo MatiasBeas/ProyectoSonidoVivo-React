@@ -84,12 +84,47 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(CLAVE_SESION);
         setSesion(null);
     }
+    function actualizarPerfil({ nombre, passwordNueva, passwordConfirmar }) {
+        if (!nombre.trim()) {
+            return { ok: false, error: "El nombre no puede estar vacío." };
+        }
+
+        if (passwordNueva || passwordConfirmar) {
+            if (passwordNueva.length < 6) {
+                return { ok: false, error: "La contraseña debe tener al menos 6 caracteres." };
+            }
+
+            if (!/[A-Z]/.test(passwordNueva) || !/[a-z]/.test(passwordNueva) || !/[0-9]/.test(passwordNueva)) {
+                return { ok: false, error: "La contraseña debe tener Mayusculas, minusculas y numero." };
+            }
+
+            if (passwordNueva !== passwordConfirmar) {
+                return { ok: false, error: "Las contraseñas no coinciden." };
+            }
+        }
+
+        const usuarios = leerJSON(CLAVE_USUARIO, []);
+        const usuario = usuarios.find(u => u.email.toLowerCase() === sesion.email.toLowerCase());
+
+        if (usuario) {
+            usuario.nombre = nombre.trim();
+            if (passwordNueva) usuario.password = passwordNueva;
+            localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuarios));
+        }
+
+        const nuevaSesion = { ...sesion, nombre: nombre.trim() };
+        localStorage.setItem(CLAVE_SESION, JSON.stringify(nuevaSesion));
+        setSesion(nuevaSesion);
+
+        return { ok: true };
+    }
 
     const value = {
         sesion,
         login,
         registrar,
         logout,
+        actualizarPerfil,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
