@@ -114,10 +114,6 @@ body {
     text-decoration: underline;
 }
 
-<<<<<<< HEAD
-/* ---- Tarjetas de productos ---- */
-=======
->>>>>>> recuperacion
 .badge-categoria {
     background-color: rgba(201, 50, 125, 0.12);
     color: var(--acento);
@@ -136,10 +132,6 @@ body {
     border-top-color: var(--acento);
 }
 
-<<<<<<< HEAD
-/* ---- Barra de herramientas del catálogo ---- */
-=======
->>>>>>> recuperacion
 .toolbar-productos {
     background-color: #ffffff;
     border-radius: 12px;
@@ -157,10 +149,6 @@ body {
     border-radius: 50px;
 }
 
-<<<<<<< HEAD
-/* ---- Footer pegado al fondo ---- */
-=======
->>>>>>> recuperacion
 body {
     display: flex;
     flex-direction: column;
@@ -171,10 +159,6 @@ body > main {
     flex: 1;
 }
 
-<<<<<<< HEAD
-/* ---- Encabezado de página interior (ej. Contacto) ---- */
-=======
->>>>>>> recuperacion
 .page-header {
     background: linear-gradient(135deg, var(--oscuro) 0%, #16213e 100%);
     color: #ffffff;
@@ -191,10 +175,6 @@ body > main {
     margin-bottom: 0;
 }
 
-<<<<<<< HEAD
-/* ---- Tarjeta contenedora (ej. mapa, secciones destacadas) ---- */
-=======
->>>>>>> recuperacion
 .seccion-card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -202,10 +182,6 @@ body > main {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
-<<<<<<< HEAD
-/* ---- Indicadores de stock (panel vendedor) ---- */
-=======
->>>>>>> recuperacion
 #tablaStock .stock-bajo {
     color: #b8860b;
     font-weight: 600;
@@ -223,8 +199,6 @@ body > main {
 img{
     max-width: 500px;
     height: 500px;
-<<<<<<< HEAD
-=======
 }
 
 html, body, #root {
@@ -239,5 +213,4 @@ html, body, #root {
 
 footer {
   margin-top: auto;
->>>>>>> recuperacion
 }
