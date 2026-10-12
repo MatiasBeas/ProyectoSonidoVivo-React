@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 
 import productos from '../data/productos';
 
 function Productos() {
+=======
+import productos from '../data/productos';
+import { useCarrito } from '../context/CarritoContext';
+
+function Productos() {
+    const {agregarAlCarrito} = useCarrito();
+>>>>>>> recuperacion
     return (
         <>
             <section className="py-5">
@@ -19,7 +27,11 @@ function Productos() {
                                         <p className="card-text flex-grow-1">{producto.descripcion}</p>
                                         <p className="fw-bold fs-5 mb-1">${producto.precio.toLocaleString("es-CL")}</p>
                                         <p className="small text-success mb-3">Stock: {producto.stock}</p>
+<<<<<<< HEAD
                                         <button className="btn btn-accent mt-auto">Agregar al carrito</button>
+=======
+                                        <button className="btn btn-accent mt-auto" onClick={() => agregarAlCarrito(producto.id)}>Agregar al carrito</button>
+>>>>>>> recuperacion
                                     </div>
 
                                 </div>
