@@ -4,6 +4,8 @@ import { useContext } from 'react';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 import { CarritoProvider } from './context/CarritoContext';
 import { PedidosProvider } from './context/PedidosContext';
+import { StockProvider } from './context/StockContext';
+import { ProductosProvider } from './context/ProductosContext';
 
 import RutaProtegida from './components/RutaProtegida'
 
@@ -17,15 +19,27 @@ import Perfil from './pages/Perfil';
 import Checkout from './pages/Checkout';
 import MisPedidos from './pages/MisPedidos';
 
+import VendedorPedidos from './pages/VendedorPedidos';
+import VendedorStock from './pages/VendedorStock';
+
+import AdminUsuarios from './pages/AdminUsuarios';
+import AdminProductos from './pages/AdminProductos';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
+const RUTA_POR_ROL = {
+  vendedor: '/vendedor',
+  administrador: '/admin',
+};
 
 function RedirigirSiLogueado({ children }) {
   const { sesion } = useContext(AuthContext);
   const location = useLocation();
 
   if (sesion) {
-    return <Navigate to={location.state?.from || '/'} replace />;
+    const rutaPorRol = RUTA_POR_ROL[sesion.rol] || '/';
+    return <Navigate to={location.state?.from || rutaPorRol} replace />;
   }
   return children;
 }
@@ -68,6 +82,38 @@ function AppContent() {
             </RutaProtegida>
           }
         />
+        <Route
+          path="/vendedor/pedidos"
+          element={
+            <RutaProtegida rol="vendedor">
+              <VendedorPedidos />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/vendedor"
+          element={
+            <RutaProtegida rol="vendedor">
+              <VendedorStock />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RutaProtegida rol="administrador">
+              <AdminUsuarios />
+            </RutaProtegida>
+          }
+        />
+        <Route
+          path="/admin/productos"
+          element={
+            <RutaProtegida rol="administrador">
+              <AdminProductos />
+            </RutaProtegida>
+          }
+        />
       </Routes>
       <Footer />
     </BrowserRouter>
@@ -79,7 +125,11 @@ export default function App() {
     <AuthProvider>
       <CarritoProvider>
         <PedidosProvider>
-          <AppContent />
+          <ProductosProvider>
+            <StockProvider>
+              <AppContent />
+            </StockProvider>
+          </ProductosProvider>
         </PedidosProvider>
       </CarritoProvider>
     </AuthProvider>

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import productos from '../data/productos';
+import { useProductos } from '../context/ProductosContext';
 import { useAuth } from '../context/AuthContext';
 import { useCarrito } from '../context/CarritoContext';
 import { usePedidos } from '../context/PedidosContext';
+import { useStock } from '../context/StockContext';
 
 const CODIGO_CUPON = 'SONIDO10';
 const PORCENTAJE_DESCUENTO = 0.05;
@@ -16,7 +17,9 @@ function Checkout() {
     const { sesion } = useAuth();
     const { carrito, vaciarCarrito } = useCarrito();
     const { crearPedido } = usePedidos();
+    const { obtenerStock, descontarStock } = useStock();
     const navigate = useNavigate();
+    const { catalogo } = useProductos();
 
     const [entrega, setEntrega] = useState('despacho');
     const [direccion, setDireccion] = useState('');
@@ -32,7 +35,7 @@ function Checkout() {
     const [cvv, setCvv] = useState('');
 
     const lineas = carrito
-        .map(item => ({ ...item, producto: productos.find(p => p.id === item.id) }))
+        .map(item => ({ ...item, producto: catalogo.find(p => p.id === item.id) }))
         .filter(linea => linea.producto);
 
     const subtotal = lineas.reduce((suma, l) => suma + l.producto.precio * l.cantidad, 0);
@@ -85,6 +88,15 @@ function Checkout() {
 
         if (lineas.length === 0) {
             setError('Tu carrito está vacío.');
+            return;
+        }
+
+        const sinStock = lineas.find(l => l.cantidad > obtenerStock(l.producto.id));
+        if (sinStock) {
+            setError(
+                `No hay stock suficiente de "${sinStock.producto.nombre}" ` +
+                `(disponibles: ${obtenerStock(sinStock.producto.id)}). Ajusta tu carrito.`
+            );
             return;
         }
 
@@ -151,9 +163,12 @@ function Checkout() {
             estadoPago,
             estado,
         });
+        descontarStock(
+            lineas.map(({ producto, cantidad }) => ({ id: producto.id, cantidad }))
+        );
 
         vaciarCarrito();
-        navigate('/pedidos'); 
+        navigate('/pedidos');
     };
 
     return (

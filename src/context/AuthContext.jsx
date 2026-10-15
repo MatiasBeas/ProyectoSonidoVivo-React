@@ -119,12 +119,40 @@ export function AuthProvider({ children }) {
         return { ok: true };
     }
 
+    // ---- Funciones para el panel del administrador ----
+    function obtenerUsuarios() {
+        return leerJSON(CLAVE_USUARIO, []);
+    }
+
+    function cambiarRol(email, nuevoRol) {
+        const usuarios = leerJSON(CLAVE_USUARIO, []);
+        const usuario = usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+        if (usuario) {
+            usuario.rol = nuevoRol;
+            localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuarios));
+        }
+    }
+
+    function alternarActivo(email) {
+        const usuarios = leerJSON(CLAVE_USUARIO, []);
+        const usuario = usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+        if (usuario) {
+            usuario.activo = usuario.activo === false; // false -> true, cualquier otro -> false
+            localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuarios));
+        }
+    }
+
     const value = {
         sesion,
         login,
         registrar,
         logout,
         actualizarPerfil,
+        obtenerUsuarios,
+        cambiarRol,
+        alternarActivo,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,16 +1,19 @@
 import { Link, useNavigate } from 'react-router-dom';
-import productos from '../data/productos';
+import { useProductos } from '../context/ProductosContext';
 import { useCarrito } from '../context/CarritoContext';
+import { useStock } from '../context/StockContext';
 
 
 function Carrito() {
     const { carrito, cambiarCantidad, eliminarDelCarrito } = useCarrito();
+    const { obtenerStock } = useStock();
     const navigate = useNavigate();
+    const { catalogo } = useProductos();
 
     const lineas = carrito
         .map(item => ({
             ...item,
-            producto: productos.find(p => p.id === item.id),
+            producto: catalogo.find(p => p.id === item.id),
         }))
         .filter(linea => linea.producto);
 
@@ -46,15 +49,24 @@ function Carrito() {
                                     <p className="text-muted mb-0 small">
                                         ${producto.precio.toLocaleString('es-CL')} c/u
                                     </p>
+                                    {cantidad > obtenerStock(producto.id) && (
+                                        <p className="small text-danger mb-0">
+                                            Solo quedan {obtenerStock(producto.id)} disponibles
+                                        </p>
+                                    )}
                                 </div>
 
                                 <input
                                     type="number"
                                     min="1"
+                                    max={obtenerStock(producto.id)}
                                     className="form-control"
                                     style={{ width: '70px' }}
                                     value={cantidad}
-                                    onChange={e => cambiarCantidad(producto.id, e.target.value)}
+                                    onChange={e => cambiarCantidad(
+                                        producto.id,
+                                        Math.min(Number(e.target.value), obtenerStock(producto.id))
+                                    )}
                                 />
 
                                 <p className="fw-bold mb-0" style={{ minWidth: '90px' }}>
