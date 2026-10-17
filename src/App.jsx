@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 
 import { AuthContext, AuthProvider } from './context/AuthContext';
@@ -48,7 +48,7 @@ function AppContent() {
   const { sesion } = useContext(AuthContext);
 
   return (
-    <BrowserRouter>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Inicio />} />
@@ -116,7 +116,7 @@ function AppContent() {
         />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </>
   );
 }
 
